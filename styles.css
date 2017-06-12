@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,700');
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 300;
+    padding: 0;
+    margin:0;
+    background-color: #656565;
+    color: #eee;
+}
+
+h1 {
+    font-weight: 300;
+    text-align: center;
+    font-size: 3.67em;
+    line-height: 2em;
+}
+
+#calculator {
+    min-width: 30%;
+    max-width: 50%;
+    width: 400px;
+    margin: 0 auto;
+}
+
+.row {
+    display: flex;
+}
+
+a {
+    font-size: 3em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 25%;
+    height: 100%;
+    padding: 0.5em 0;
+    border-top: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    border-collapse: collapse;
+    text-align: center;
+    text-decoration: none;
+    color: #eee;
+}
+
+a:hover {
+    background-color: #ddd;
+    color: #333;
+}
+
+a:active {
+    background-color: #fff;
+}
+
+.row a:last-child {
+    border-right: 1px solid #ddd;
+}
+
+.row:last-child {
+    border-bottom: 1px solid #ddd;
+}
+
+a#zero {
+    width: 50%;
+}
+
+#display {
+    height: 10em;
+    background-color: #333;
+    border: 1px solid #ddd;
+    border-bottom: none;
+}
+
+.top-row {
+    background-color: #333;
+}
+
+.number {
+    background-color: #999;
+}
+
+.operation {
+    background-color: orange;
+    color: #eee;
+}
