@@ -1,6 +1,9 @@
 var display = document.getElementById('display');
-var els = document.querySelectorAll('a.number');
-var fullNumber = display.innerHTML;
+var numberElements = document.querySelectorAll('a.number');
+var operatorElements = document.querySelectorAll('a.operation');
+var fullNumber = '';
+var lastResult = 0;
+var lastOperation = '';
 
 display.innerHTML = "0";
 
@@ -14,24 +17,58 @@ function displayNumbers(number) {
     display.innerHTML = fullNumber;
 }
 
+function clear() {
+    lastResult = 0;
+    lastOperation = '';
+    display.innerHTML = '0';
+    fullNumber = '';
+}
+
+function operation(operator) {
+    if (lastOperation !== '') {
+        lastResult = Number(lastResult);
+        number = Number(fullNumber);
+        if (lastOperation === '+') {
+            lastResult += number;
+        }
+        lastOperation = operator;
+        display.innerHTML = String(lastResult);
+        fullNumber = '';
+    } else {
+        lastResult = Number(fullNumber);
+        fullNumber = '';        
+        lastOperation = '+';
+    }
+}
+
 function keyPress(event) {
     if (event.key === 'c') {
-        display.innerHTML = '0';
-        fullNumber = '';
-    }
-    if (event.key === ',') {
+        clear();
+    } else if (event.key === ',') {
         displayNumbers('.');
+    } else if (event.key === '+') {
+        operation(event.key);
     }
-    for (let i=0, n=els.length; i<n; ++i) {
-        if (event.key === els[i].innerHTML) {
-            displayNumbers(els[i].innerHTML);
+    for (let i = 0; i < numberElements.length; i++) {
+        if (event.key === numberElements[i].innerHTML) {
+            displayNumbers(numberElements[i].innerHTML);
         }
     }  
 }
 
-for (let i=0, n=els.length; i<n; ++i) {
-    els[i].onclick = function () {
-        displayNumbers(els[i].innerHTML);
+for (let i = 0; i < numberElements.length; i++) {
+    numberElements[i].onclick = function () {
+        displayNumbers(numberElements[i].innerHTML);
+    }
+}
+
+for (let i = 0; i < operatorElements.length; i++) {
+    operatorElements[i].onclick = function () {
+        var operator = operatorElements[i];
+        operation(operator.innerHTML);
+        if (operator.innerHTML === 'C') {
+            clear();
+        }
     }
 }
 

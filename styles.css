@@ -80,10 +80,6 @@ a#zero {
     border-bottom: none;
 }
 
-.top-row {
-    background-color: #aaa;
-}
-
 .number {
     background-color: #ccc;
     color: #333;
@@ -92,4 +88,8 @@ a#zero {
 .operation {
     background-color: orange;
     color: #eee;
+}
+
+.top-row {
+    background-color: #aaa;
 }
