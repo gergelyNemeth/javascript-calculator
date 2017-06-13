@@ -40,8 +40,8 @@ a {
     width: 25%;
     height: 100%;
     padding: 0.5em 0;
-    border-top: 1px solid #ddd;
-    border-left: 1px solid #ddd;
+    border-top: 1px solid #333;
+    border-left: 1px solid #333;
     border-collapse: collapse;
     text-align: center;
     text-decoration: none;
@@ -58,11 +58,11 @@ a:active {
 }
 
 .row a:last-child {
-    border-right: 1px solid #ddd;
+    border-right: 1px solid #333;
 }
 
 .row:last-child {
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #333;
 }
 
 a#zero {
@@ -70,21 +70,23 @@ a#zero {
 }
 
 #display {
+    padding: 0.2em; 
     font-size: 4em;
     text-align: right;
     height: 2em;
     background-color: #333;
     color: #eee;
-    border: 1px solid #ddd;
+    border: 1px solid #333;
     border-bottom: none;
 }
 
 .top-row {
-    background-color: #333;
+    background-color: #aaa;
 }
 
 .number {
-    background-color: #999;
+    background-color: #ccc;
+    color: #333;
 }
 
 .operation {
