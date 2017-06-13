@@ -70,8 +70,11 @@ a#zero {
 }
 
 #display {
-    height: 10em;
+    font-size: 4em;
+    text-align: right;
+    height: 2em;
     background-color: #333;
+    color: #eee;
     border: 1px solid #ddd;
     border-bottom: none;
 }
