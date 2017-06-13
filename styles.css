@@ -93,3 +93,8 @@ a#zero {
 .top-row {
     background-color: #aaa;
 }
+
+.triggered {
+    background-color: #fff;
+    color: #333;
+}

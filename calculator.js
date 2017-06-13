@@ -1,6 +1,7 @@
 var display = document.getElementById('display');
 var numberElements = document.querySelectorAll('a.number');
 var operatorElements = document.querySelectorAll('a.operation');
+var allElements = document.querySelectorAll('a.number, a.operation');
 var fullNumber = '';
 var lastResult = 0;
 var lastOperation = '';
@@ -42,18 +43,34 @@ function operation(operator) {
 }
 
 function keyPress(event) {
-    if (event.key === 'c') {
+    eventKey = event.key;
+    if (eventKey === 'c') {
         clear();
-    } else if (event.key === ',') {
+        eventKey = 'C';
+    } else if (eventKey === ',') {
         displayNumbers('.');
-    } else if (event.key === '+') {
-        operation(event.key);
+    } else if (eventKey === '*') {
+        eventKey = 'x';
+    } else if (eventKey === '+') {
+        operation(eventKey);
+    } else if (eventKey === 'Return') {
+        console.log('ENTER');
+        eventKey = "=";
     }
     for (let i = 0; i < numberElements.length; i++) {
-        if (event.key === numberElements[i].innerHTML) {
+        if (eventKey === numberElements[i].innerHTML) {
             displayNumbers(numberElements[i].innerHTML);
         }
-    }  
+    }
+    for (let i = 0; i < allElements.length; i++) {
+        if (eventKey === allElements[i].innerHTML) {
+            allElements[i].classList.add('triggered');
+            setTimeout(function() {
+                allElements[i].classList.remove('triggered');
+            }, 100);
+
+        }
+    }
 }
 
 for (let i = 0; i < numberElements.length; i++) {
