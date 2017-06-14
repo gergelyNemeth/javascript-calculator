@@ -32,13 +32,16 @@ function operation(operator) {
         if (lastOperation === '+') {
             lastResult += number;
         }
+        if (lastOperation ==='-') {
+            lastResult -= number;
+        }
         lastOperation = operator;
         display.innerHTML = String(lastResult);
         fullNumber = '';
     } else {
         lastResult = Number(fullNumber);
-        fullNumber = '';        
-        lastOperation = '+';
+        fullNumber = '';      
+        lastOperation = operator;
     }
 }
 
@@ -51,7 +54,7 @@ function keyPress(event) {
         displayNumbers('.');
     } else if (eventKey === '*') {
         eventKey = 'x';
-    } else if (eventKey === '+') {
+    } else if (eventKey === '+' || eventKey === '-') {
         operation(eventKey);
     } else if (eventKey === 'Return') {
         console.log('ENTER');
