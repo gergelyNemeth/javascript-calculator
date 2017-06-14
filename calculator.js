@@ -1,10 +1,10 @@
 var display = document.getElementById('display');
-var numberElements = document.querySelectorAll('a.number');
-var operatorElements = document.querySelectorAll('a.operation');
-var allElements = document.querySelectorAll('a.number, a.operation');
+var numberButtons = document.querySelectorAll('a.number');
+var operatorButtons = document.querySelectorAll('a.operation');
+var allButtons = document.querySelectorAll('a.number, a.operation');
 var fullNumber = '';
-var lastResult = 0;
-var lastOperation = '';
+var result = 0;
+var previousOperation = '';
 
 display.innerHTML = "0";
 
@@ -19,29 +19,29 @@ function displayNumbers(number) {
 }
 
 function clear() {
-    lastResult = 0;
-    lastOperation = '';
+    result = 0;
+    previousOperation = '';
     display.innerHTML = '0';
     fullNumber = '';
 }
 
 function operation(operator) {
-    if (lastOperation !== '') {
-        lastResult = Number(lastResult);
+    if (previousOperation !== '') {
+        result = Number(result);
         number = Number(fullNumber);
-        if (lastOperation === '+') {
-            lastResult += number;
+        if (previousOperation === '+') {
+            result += number;
         }
-        if (lastOperation ==='-') {
-            lastResult -= number;
+        if (previousOperation ==='-') {
+            result -= number;
         }
-        lastOperation = operator;
-        display.innerHTML = String(lastResult);
+        previousOperation = operator;
+        display.innerHTML = String(result);
         fullNumber = '';
     } else {
-        lastResult = Number(fullNumber);
+        result = Number(fullNumber);
         fullNumber = '';      
-        lastOperation = operator;
+        previousOperation = operator;
     }
 }
 
@@ -60,31 +60,31 @@ function keyPress(event) {
         console.log('ENTER');
         eventKey = "=";
     }
-    for (let i = 0; i < numberElements.length; i++) {
-        if (eventKey === numberElements[i].innerHTML) {
-            displayNumbers(numberElements[i].innerHTML);
+    for (let i = 0; i < numberButtons.length; i++) {
+        if (eventKey === numberButtons[i].innerHTML) {
+            displayNumbers(numberButtons[i].innerHTML);
         }
     }
-    for (let i = 0; i < allElements.length; i++) {
-        if (eventKey === allElements[i].innerHTML) {
-            allElements[i].classList.add('triggered');
+    for (let i = 0; i < allButtons.length; i++) {
+        if (eventKey === allButtons[i].innerHTML) {
+            allButtons[i].classList.add('triggered');
             setTimeout(function() {
-                allElements[i].classList.remove('triggered');
+                allButtons[i].classList.remove('triggered');
             }, 100);
 
         }
     }
 }
 
-for (let i = 0; i < numberElements.length; i++) {
-    numberElements[i].onclick = function () {
-        displayNumbers(numberElements[i].innerHTML);
+for (let i = 0; i < numberButtons.length; i++) {
+    numberButtons[i].onclick = function () {
+        displayNumbers(numberButtons[i].innerHTML);
     }
 }
 
-for (let i = 0; i < operatorElements.length; i++) {
-    operatorElements[i].onclick = function () {
-        var operator = operatorElements[i];
+for (let i = 0; i < operatorButtons.length; i++) {
+    operatorButtons[i].onclick = function () {
+        var operator = operatorButtons[i];
         operation(operator.innerHTML);
         if (operator.innerHTML === 'C') {
             clear();
