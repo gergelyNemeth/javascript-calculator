@@ -35,14 +35,15 @@ function operation(operator) {
         if (previousOperation ==='-') {
             result -= number;
         }
-        previousOperation = operator;
-        display.innerHTML = String(result);
-        fullNumber = '';
+        if (previousOperation ==='x') {
+            result *= number;
+        }
+        display.innerHTML = String(result);          
     } else {
         result = Number(fullNumber);
-        fullNumber = '';      
-        previousOperation = operator;
     }
+    fullNumber = '';
+    previousOperation = operator;
 }
 
 function keyPress(event) {
@@ -54,7 +55,8 @@ function keyPress(event) {
         displayNumbers('.');
     } else if (eventKey === '*') {
         eventKey = 'x';
-    } else if (eventKey === '+' || eventKey === '-') {
+    } 
+    if (eventKey === '+' || eventKey === '-' || eventKey === 'x') {
         operation(eventKey);
     } else if (eventKey === 'Return') {
         console.log('ENTER');
