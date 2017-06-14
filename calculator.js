@@ -39,6 +39,9 @@ function operation(operator) {
             if (previousOperation ==='x') {
                 result *= number;
             }
+            if (previousOperation ==='/') {
+                result /= number;
+            }
             display.innerHTML = String(result);          
         }
     } else {
@@ -58,7 +61,7 @@ function keyPress(event) {
     } else if (eventKey === '*') {
         eventKey = 'x';
     } 
-    if (eventKey === '+' || eventKey === '-' || eventKey === 'x') {
+    if (eventKey === '+' || eventKey === '-' || eventKey === 'x' || eventKey === '/') {
         operation(eventKey);
     } else if (eventKey === 'Return') {
         console.log('ENTER');
