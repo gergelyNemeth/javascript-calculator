@@ -5,16 +5,20 @@ var allButtons = document.querySelectorAll('a.number, a.operation');
 var fullNumber = '';
 var result = 0;
 var previousOperation = '';
+var enterPressed = false;
 
 display.innerHTML = "0";
 
 function displayNumbers(number) {
+    if (enterPressed) {
+        clear();
+    }
     if (fullNumber.split('.').length > 1 && number === '.') {
         number = '';
     }
     if (fullNumber.length < 17) {
         fullNumber += number;  
-    }
+    }   
     display.innerHTML = fullNumber;
 }
 
@@ -23,12 +27,14 @@ function clear() {
     previousOperation = '';
     display.innerHTML = '0';
     fullNumber = '';
+    enterPressed = false;
 }
 
 function operation(operator) {
-    if (previousOperation !== '') {
+    if (previousOperation !== '' && !enterPressed || operator === '=') {
         result = Number(result);
         number = Number(fullNumber);
+        console.log(result, number);
         if (fullNumber) {
             if (previousOperation === '+') {
                 result += number;
@@ -42,17 +48,23 @@ function operation(operator) {
             if (previousOperation ==='/') {
                 result /= number;
             }
-            display.innerHTML = String(result);          
+            display.innerHTML = String(result);
         }
-    } else {
+    } else if (!enterPressed) {
         result = Number(fullNumber);
     }
-    fullNumber = '';
-    previousOperation = operator;
+    if (operator !== '=') {
+        fullNumber = '';
+        previousOperation = operator;
+        enterPressed = false;
+    } else {
+        enterPressed = true;
+    }
 }
 
 function keyPress(event) {
     eventKey = event.key;
+    console.log(eventKey);
     if (eventKey === 'c') {
         clear();
         eventKey = 'C';
@@ -60,12 +72,11 @@ function keyPress(event) {
         displayNumbers('.');
     } else if (eventKey === '*') {
         eventKey = 'x';
-    } 
-    if (eventKey === '+' || eventKey === '-' || eventKey === 'x' || eventKey === '/') {
-        operation(eventKey);
-    } else if (eventKey === 'Return') {
-        console.log('ENTER');
+    } else if (eventKey === 'Enter') {
         eventKey = "=";
+    }
+    if (eventKey === '+' || eventKey === '-' || eventKey === 'x' || eventKey === '/' || eventKey === '=') {
+        operation(eventKey);
     }
     for (let i = 0; i < numberButtons.length; i++) {
         if (eventKey === numberButtons[i].innerHTML) {
