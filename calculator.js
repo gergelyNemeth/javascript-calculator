@@ -4,6 +4,7 @@ var operatorButtons = document.querySelectorAll('a.operation');
 var allButtons = document.querySelectorAll('a.number, a.operation');
 var fullNumber = '';
 var previousNumber = '';
+var newNumber = false;
 var result = 0;
 var previousOperation = '';
 var enterPressed = false;
@@ -31,6 +32,7 @@ function displayNumbers(number) {
         fullNumber += number;  
     }   
     display.innerHTML = fullNumber;
+    newNumber = true;
 }
 
 function clear() {
@@ -47,30 +49,37 @@ function operation(operator) {
         if (!fullNumber) {
             fullNumber = previousNumber;
         }
+        // Change operand to last result when operator entered after equal sign
+        if (!newNumber && enterPressed) {
+            fullNumber = result;
+            newNumber = true;
+        }
         result = Number(result);
         number = Number(fullNumber);
-        if (fullNumber) {
-            if (previousOperation === '+') {
-                result += number;
-            } else if (previousOperation ==='-') {
-                result -= number;
-            } else if (previousOperation ==='x') {
-                result *= number;
-            } else if (previousOperation ==='/') {
-                result /= number;
+        if (previousOperation === '+') {
+            result += number;
+        } else if (previousOperation ==='-') {
+            result -= number;
+        } else if (previousOperation ==='x') {
+            result *= number;
+        } else if (previousOperation ==='/') {
+            result /= number;
+            if (Math.floor(result) !== result) {
                 result = Number(result).toPrecision(15);
             }
-            console.log(result, number);
-            // Prevent displaying too long number
-            if ((result > 1 || result < -1) && String(result).length <= 17) {
-                display.innerHTML = String(result);
-            } else if (result > 1 || result < -1) {
-                display.innerHTML = String(result.toExponential(10));
-            } else if (result > 0.000001) {
-                display.innerHTML = String(result).slice(0, 17);
-            } else {
-                display.innerHTML = parseFloat(Number(result).toPrecision(10))
-            }
+        }
+        if (operator !== '=') {
+            newNumber = false;
+        }
+        // Prevent displaying too long number
+        if ((result > 1 || result < -1) && String(result).length <= 17) {
+            display.innerHTML = String(result);
+        } else if (result > 1 || result < -1) {
+            display.innerHTML = String(result.toExponential(10));
+        } else if (result > 0.000001) {
+            display.innerHTML = String(result).slice(0, 17);
+        } else {
+            display.innerHTML = parseFloat(Number(result).toPrecision(10))
         }
     } else if (!enterPressed && operator !== '=') {
         result = Number(fullNumber);
@@ -79,6 +88,9 @@ function operation(operator) {
         previousNumber = fullNumber;
         fullNumber = '';
         previousOperation = operator;
+        if (enterPressed) {
+            newNumber = false;
+        }
         enterPressed = false;
     } else {
         enterPressed = true;
