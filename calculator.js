@@ -29,16 +29,18 @@ function operation(operator) {
     if (previousOperation !== '') {
         result = Number(result);
         number = Number(fullNumber);
-        if (previousOperation === '+') {
-            result += number;
+        if (fullNumber) {
+            if (previousOperation === '+') {
+                result += number;
+            }
+            if (previousOperation ==='-') {
+                result -= number;
+            }
+            if (previousOperation ==='x') {
+                result *= number;
+            }
+            display.innerHTML = String(result);          
         }
-        if (previousOperation ==='-') {
-            result -= number;
-        }
-        if (previousOperation ==='x') {
-            result *= number;
-        }
-        display.innerHTML = String(result);          
     } else {
         result = Number(fullNumber);
     }
