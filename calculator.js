@@ -3,6 +3,7 @@ var numberButtons = document.querySelectorAll('a.number');
 var operatorButtons = document.querySelectorAll('a.operation');
 var allButtons = document.querySelectorAll('a.number, a.operation');
 var fullNumber = '';
+var previousNumber = '';
 var result = 0;
 var previousOperation = '';
 var enterPressed = false;
@@ -14,7 +15,7 @@ function displayNumbers(number) {
         clear();
     }
     // Prevent adding more than one decimal point
-    if (fullNumber.split('.').length > 1 && number === '.') {
+    if (fullNumber.split('.').length >= 2 && number === '.') {
         number = '';
     }
     // Prevent adding more than one zeros
@@ -37,26 +38,28 @@ function clear() {
     previousOperation = '';
     display.innerHTML = '0';
     fullNumber = '';
+    previousNumber = '';
     enterPressed = false;
 }
 
 function operation(operator) {
-    if (previousOperation !== '' && !enterPressed || operator === '=') {
+    if (previousOperation && (!enterPressed || operator === '=')) {
+        if (!fullNumber) {
+            fullNumber = previousNumber;
+        }
         result = Number(result);
         number = Number(fullNumber);
         if (fullNumber) {
             if (previousOperation === '+') {
                 result += number;
-            }
-            if (previousOperation ==='-') {
+            } else if (previousOperation ==='-') {
                 result -= number;
-            }
-            if (previousOperation ==='x') {
+            } else if (previousOperation ==='x') {
                 result *= number;
-            }
-            if (previousOperation ==='/') {
+            } else if (previousOperation ==='/') {
                 result /= number;
             }
+            // Prevent displaying too long number
             if (String(result).length < 17) {
                 display.innerHTML = String(result);
             } else {
@@ -66,10 +69,11 @@ function operation(operator) {
                 }, 1000);
             }
         }
-    } else if (!enterPressed) {
+    } else if (!enterPressed && operator !== '=') {
         result = Number(fullNumber);
     }
     if (operator !== '=') {
+        previousNumber = fullNumber;
         fullNumber = '';
         previousOperation = operator;
         enterPressed = false;
