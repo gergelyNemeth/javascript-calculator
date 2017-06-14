@@ -58,15 +58,18 @@ function operation(operator) {
                 result *= number;
             } else if (previousOperation ==='/') {
                 result /= number;
+                result = Number(result).toPrecision(15);
             }
+            console.log(result, number);
             // Prevent displaying too long number
-            if (String(result).length < 17) {
+            if ((result > 1 || result < -1) && String(result).length <= 17) {
                 display.innerHTML = String(result);
+            } else if (result > 1 || result < -1) {
+                display.innerHTML = String(result.toExponential(10));
+            } else if (result > 0.000001) {
+                display.innerHTML = String(result).slice(0, 17);
             } else {
-                display.innerHTML = 'TOO LONG NUMBER';
-                setTimeout(function() {
-                    clear();
-                }, 1000);
+                display.innerHTML = parseFloat(Number(result).toPrecision(10))
             }
         }
     } else if (!enterPressed && operator !== '=') {
