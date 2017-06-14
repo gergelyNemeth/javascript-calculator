@@ -34,7 +34,6 @@ function operation(operator) {
     if (previousOperation !== '' && !enterPressed || operator === '=') {
         result = Number(result);
         number = Number(fullNumber);
-        console.log(result, number);
         if (fullNumber) {
             if (previousOperation === '+') {
                 result += number;
@@ -48,7 +47,14 @@ function operation(operator) {
             if (previousOperation ==='/') {
                 result /= number;
             }
-            display.innerHTML = String(result);
+            if (String(result).length < 17) {
+                display.innerHTML = String(result);
+            } else {
+                display.innerHTML = 'TOO LONG NUMBER';
+                setTimeout(function() {
+                    clear();
+                }, 1000);
+            }
         }
     } else if (!enterPressed) {
         result = Number(fullNumber);
@@ -64,7 +70,6 @@ function operation(operator) {
 
 function keyPress(event) {
     eventKey = event.key;
-    console.log(eventKey);
     if (eventKey === 'c') {
         clear();
         eventKey = 'C';
