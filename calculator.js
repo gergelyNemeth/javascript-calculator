@@ -13,9 +13,19 @@ function displayNumbers(number) {
     if (enterPressed) {
         clear();
     }
+    // Prevent adding more than one decimal point
     if (fullNumber.split('.').length > 1 && number === '.') {
         number = '';
     }
+    // Prevent adding more than one zeros
+    if (!fullNumber || fullNumber.startsWith('0') && !fullNumber.includes('.')) {
+        fullNumber = fullNumber.slice(1);
+    }
+    // Add a zero before the decimal point when it is entered very first time
+    if (!fullNumber && number === '.') {
+        number = '0.'
+    }
+    // Prevent adding too long numbers
     if (fullNumber.length < 17) {
         fullNumber += number;  
     }   
