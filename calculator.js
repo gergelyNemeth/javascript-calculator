@@ -58,6 +58,7 @@ function precisionOfNumbers(result) {
 
 function operation(operator) {
     if (previousOperation && (!enterPressed || operator === '=')) {
+        // Equal sign pressed after another operator
         if (!fullNumber) {
             fullNumber = previousNumber;
         }
@@ -66,6 +67,7 @@ function operation(operator) {
             fullNumber = result;
             newNumber = true;
         }
+        // Operation
         if (newNumber) {
             result = Number(result);
             number = Number(fullNumber);
@@ -90,6 +92,7 @@ function operation(operator) {
     } else if (!enterPressed && operator !== '=') {
         result = Number(fullNumber);
     }
+    // Plus-minus change
     if (operator === '+/-') {
         result *= -1;
         if (display.innerHTML.startsWith('-')) {
@@ -98,6 +101,7 @@ function operation(operator) {
             display.innerHTML = "-" + display.innerHTML;
         }
     }
+    // Data preparation after operation
     if (operator !== '=') {
         previousNumber = fullNumber;
         fullNumber = '';
