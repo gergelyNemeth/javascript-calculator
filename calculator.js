@@ -90,6 +90,14 @@ function operation(operator) {
     } else if (!enterPressed && operator !== '=') {
         result = Number(fullNumber);
     }
+    if (operator === '+/-') {
+        result *= -1;
+        if (display.innerHTML.startsWith('-')) {
+            display.innerHTML = display.innerHTML.slice(1);
+        } else  {
+            display.innerHTML = "-" + display.innerHTML;
+        }
+    }
     if (operator !== '=') {
         previousNumber = fullNumber;
         fullNumber = '';
@@ -113,7 +121,9 @@ function keyPress(event) {
     } else if (eventKey === '*') {
         eventKey = 'x';
     } else if (eventKey === 'Enter') {
-        eventKey = "=";
+        eventKey = '=';
+    } else if (eventKey === 'm') {
+        eventKey = '+/-';
     }
     if (eventKey === '+' || eventKey === '-' || eventKey === 'x' || eventKey === '/' || eventKey === '=') {
         operation(eventKey);
