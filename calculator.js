@@ -44,6 +44,18 @@ function clear() {
     enterPressed = false;
 }
 
+function precisionOfNumbers(result) {
+    if ((result > 1 || result < -1) && String(result).length <= 17) {
+        display.innerHTML = String(result);
+    } else if (result > 1 || result < -1) {
+        display.innerHTML = String(result.toExponential(10));
+    } else if (result > 0.000001) {
+        display.innerHTML = String(result).slice(0, 17);
+    } else {
+        display.innerHTML = parseFloat(Number(result).toPrecision(10))
+    }
+}
+
 function operation(operator) {
     if (previousOperation && (!enterPressed || operator === '=')) {
         if (!fullNumber) {
@@ -73,15 +85,7 @@ function operation(operator) {
                 newNumber = false;
             }
             // Prevent displaying too long number
-            if ((result > 1 || result < -1) && String(result).length <= 17) {
-                display.innerHTML = String(result);
-            } else if (result > 1 || result < -1) {
-                display.innerHTML = String(result.toExponential(10));
-            } else if (result > 0.000001) {
-                display.innerHTML = String(result).slice(0, 17);
-            } else {
-                display.innerHTML = parseFloat(Number(result).toPrecision(10))
-            }
+            precisionOfNumbers(result);
         }
     } else if (!enterPressed && operator !== '=') {
         result = Number(fullNumber);
