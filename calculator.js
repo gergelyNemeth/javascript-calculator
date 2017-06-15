@@ -129,7 +129,8 @@ function keyPress(event) {
     } else if (eventKey === 'm') {
         eventKey = '+/-';
     }
-    if (eventKey === '+' || eventKey === '-' || eventKey === 'x' || eventKey === '/' || eventKey === '=') {
+    if (eventKey === '+' || eventKey === '-' || eventKey === 'x' || eventKey === '/' 
+        || eventKey === '=' || eventKey === '+/-') {
         operation(eventKey);
     }
     for (let i = 0; i < numberButtons.length; i++) {
