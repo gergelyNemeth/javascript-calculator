@@ -50,36 +50,38 @@ function operation(operator) {
             fullNumber = previousNumber;
         }
         // Change operand to last result when operator entered after equal sign
-        if (!newNumber && enterPressed) {
+        if (!newNumber && (enterPressed || operator === '=')) {
             fullNumber = result;
             newNumber = true;
         }
-        result = Number(result);
-        number = Number(fullNumber);
-        if (previousOperation === '+') {
-            result += number;
-        } else if (previousOperation ==='-') {
-            result -= number;
-        } else if (previousOperation ==='x') {
-            result *= number;
-        } else if (previousOperation ==='/') {
-            result /= number;
-            if (Math.floor(result) !== result) {
-                result = Number(result).toPrecision(15);
+        if (newNumber) {
+            result = Number(result);
+            number = Number(fullNumber);
+            if (previousOperation === '+') {
+                result += number;
+            } else if (previousOperation ==='-') {
+                result -= number;
+            } else if (previousOperation ==='x') {
+                result *= number;
+            } else if (previousOperation ==='/') {
+                result /= number;
+                if (Math.floor(result) !== result) {
+                    result = Number(result).toPrecision(15);
+                }
             }
-        }
-        if (operator !== '=') {
-            newNumber = false;
-        }
-        // Prevent displaying too long number
-        if ((result > 1 || result < -1) && String(result).length <= 17) {
-            display.innerHTML = String(result);
-        } else if (result > 1 || result < -1) {
-            display.innerHTML = String(result.toExponential(10));
-        } else if (result > 0.000001) {
-            display.innerHTML = String(result).slice(0, 17);
-        } else {
-            display.innerHTML = parseFloat(Number(result).toPrecision(10))
+            if (operator !== '=') {
+                newNumber = false;
+            }
+            // Prevent displaying too long number
+            if ((result > 1 || result < -1) && String(result).length <= 17) {
+                display.innerHTML = String(result);
+            } else if (result > 1 || result < -1) {
+                display.innerHTML = String(result.toExponential(10));
+            } else if (result > 0.000001) {
+                display.innerHTML = String(result).slice(0, 17);
+            } else {
+                display.innerHTML = parseFloat(Number(result).toPrecision(10))
+            }
         }
     } else if (!enterPressed && operator !== '=') {
         result = Number(fullNumber);
