@@ -8,6 +8,7 @@ var newNumber = false;
 var result = 0;
 var previousOperation = '';
 var enterPressed = false;
+var percentage = 1;
 
 display.innerHTML = "0";
 
@@ -42,6 +43,7 @@ function clear() {
     fullNumber = '';
     previousNumber = '';
     enterPressed = false;
+    newNumber = false;
 }
 
 function precisionOfNumbers(result) {
@@ -57,7 +59,7 @@ function precisionOfNumbers(result) {
 }
 
 function operation(operator) {
-    if (previousOperation && (!enterPressed || operator === '=')) {
+    if (previousOperation && (!enterPressed || operator === '=') && operator !== '%') {
         // Equal sign pressed after another operator
         if (!fullNumber) {
             fullNumber = previousNumber;
@@ -72,7 +74,7 @@ function operation(operator) {
             result = Number(result);
             number = Number(fullNumber);
             if (previousOperation === '+') {
-                result += number;
+                result += number;   
             } else if (previousOperation ==='-') {
                 result -= number;
             } else if (previousOperation ==='x') {
@@ -89,7 +91,7 @@ function operation(operator) {
             // Prevent displaying too long number
             precisionOfNumbers(result);
         }
-    } else if (!enterPressed && operator !== '=') {
+    } else if (!enterPressed && operator !== '=' && operator !== '%') {
         result = Number(fullNumber);
     }
     // Plus-minus change
@@ -101,8 +103,24 @@ function operation(operator) {
             display.innerHTML = "-" + display.innerHTML;
         }
     }
+    // Percentage of numbers
+    if (operator === '%') {
+        percentage = Number(fullNumber) / 100;
+        if (previousOperation === '+' || previousOperation === '-') {
+            fullNumber = Number(result) * percentage;
+        } else if (previousOperation === 'x' || previousOperation === '/') {
+            fullNumber = percentage;
+        } else {
+            if (result) {
+                fullNumber = percentage;
+            } else {
+                fullNumber = percentage;
+            }
+        }
+        display.innerHTML = fullNumber;
+    }
     // Data preparation after operation
-    if (operator !== '=') {
+    if (operator !== '=' && operator !== '%') {
         previousNumber = fullNumber;
         fullNumber = '';
         previousOperation = operator;
@@ -110,7 +128,7 @@ function operation(operator) {
             newNumber = false;
         }
         enterPressed = false;
-    } else {
+    } else if (operator === '='){
         enterPressed = true;
     }
 }
@@ -130,7 +148,7 @@ function keyPress(event) {
         eventKey = '+/-';
     }
     if (eventKey === '+' || eventKey === '-' || eventKey === 'x' || eventKey === '/' 
-        || eventKey === '=' || eventKey === '+/-') {
+        || eventKey === '=' || eventKey === '+/-' || eventKey === '%') {
         operation(eventKey);
     }
     for (let i = 0; i < numberButtons.length; i++) {
