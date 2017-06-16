@@ -70,6 +70,9 @@ function operation(operator) {
             fullNumber = result;
             newNumber = true;
         }
+        if (operator !== '=' && operator === previousOperation) {
+            newNumber = false;
+        }
         // Operation
         if (newNumber) {
             result = Number(result);
