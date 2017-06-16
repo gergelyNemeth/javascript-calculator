@@ -9,6 +9,7 @@ var newNumber = false;
 var result = 0;
 var previousOperation = '';
 var enterPressed = false;
+var afterClear = true;
 var percentage = 1;
 
 display.innerHTML = "0";
@@ -45,6 +46,7 @@ function clear() {
     previousNumber = '';
     enterPressed = false;
     newNumber = false;
+    afterClear = true;
 }
 
 function precisionOfNumbers(result) {
@@ -60,22 +62,20 @@ function precisionOfNumbers(result) {
 }
 
 function operation(operator) {
-    if (previousOperation && (!enterPressed || operator === '=') && operator !== '%') {
+    if (previousOperation && (!enterPressed || operator === '=') && operator !== '%' && operator !== '+/-') {
+        afterClear = false;
         // Equal sign pressed after another operator
         if (!fullNumber) {
             fullNumber = previousNumber;
         }
-        // Change operand to last result when operator entered after equal sign
+        // Change operand to last result when operator pressed after equal sign
         if (!newNumber && (enterPressed || operator === '=')) {
             fullNumber = result;
             newNumber = true;
         }
-        if (operator !== '=' && operator === previousOperation) {
-            newNumber = false;
-        }
         // Operation
         if (newNumber) {
-            result = Number(result);
+            result = Number(result); 
             number = Number(fullNumber);
             if (previousOperation === '+') {
                 result += number;   
@@ -90,7 +90,7 @@ function operation(operator) {
                         result = Number(result).toPrecision(15);
                     }
                 } else {
-                    display.innerHTML = "Division by zero";
+                    display.innerHTML = 'Division by zero';
                     setTimeout(function() {
                         display.innerHTML = '0';
                         clear()
@@ -104,16 +104,27 @@ function operation(operator) {
             // Prevent displaying too long number
             precisionOfNumbers(result);
         }
-    } else if (!enterPressed && operator !== '=' && operator !== '%') {
+    } else if (!enterPressed && operator !== '=' && operator !== '%' && operator !== '+/-') {
         result = Number(fullNumber);
+        if (afterClear) {
+            newNumber = false;
+        }
     }
     // Plus-minus change
     if (operator === '+/-') {
-        result *= -1;
-        if (display.innerHTML.startsWith('-')) {
-            display.innerHTML = display.innerHTML.slice(1);
-        } else  {
-            display.innerHTML = "-" + display.innerHTML;
+        if (newNumber) {
+            if (!enterPressed) {
+                fullNumber = Number(fullNumber) * -1;
+            } else {
+                result *= -1;
+            }
+            if (display.innerHTML.startsWith('-')) {
+                display.innerHTML = display.innerHTML.slice(1);
+            } else  {
+                display.innerHTML = "-" + display.innerHTML;
+            }
+            // newNumber = true;
+            return;
         }
     }
     // Percentage of numbers
@@ -145,7 +156,7 @@ function operation(operator) {
         enterPressed = true;
     }
 }
-
+// Handle key press
 function keyPress(event) {
     eventKey = event.key;
     if (eventKey === 'c') {
@@ -186,13 +197,13 @@ function keyPress(event) {
         }
     }
 }
-
+// Event handlers of the number buttons
 for (let i = 0; i < numberButtons.length; i++) {
     numberButtons[i].onclick = function () {
         displayNumbers(numberButtons[i].innerHTML);
     }
 }
-
+// Event handlers of the number buttons
 for (let i = 0; i < operatorButtons.length; i++) {
     operatorButtons[i].onclick = function () {
         var operator = operatorButtons[i];
