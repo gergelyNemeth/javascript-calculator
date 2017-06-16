@@ -1,6 +1,7 @@
 var display = document.getElementById('display');
 var numberButtons = document.querySelectorAll('a.number');
 var operatorButtons = document.querySelectorAll('a.operation');
+var baseOperatorButtons = document.querySelectorAll('a#minus, a#plus, a#multiply, a#division');
 var allButtons = document.querySelectorAll('a.number, a.operation');
 var fullNumber = '';
 var previousNumber = '';
@@ -163,6 +164,13 @@ function keyPress(event) {
                 allButtons[i].classList.remove('triggered');
             }, 100);
 
+        }
+        for (let i = 0; i < baseOperatorButtons.length; i++) {
+            if (eventKey === baseOperatorButtons[i].innerHTML) {
+                baseOperatorButtons[i].classList.add('active-operation');
+            } else {
+                baseOperatorButtons[i].classList.remove('active-operation')
+            }
         }
     }
 }

@@ -98,3 +98,7 @@ a#zero {
     background-color: #fff;
     color: #333;
 }
+
+.active-operation {
+    background-color: darkorange;
+}
