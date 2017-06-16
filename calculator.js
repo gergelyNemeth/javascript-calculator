@@ -84,9 +84,18 @@ function operation(operator) {
             } else if (previousOperation ==='x') {
                 result *= number;
             } else if (previousOperation ==='/') {
-                result /= number;
-                if (Math.floor(result) !== result) {
-                    result = Number(result).toPrecision(15);
+                if (number !== 0) {
+                    result /= number;
+                    if (Math.floor(result) !== result) {
+                        result = Number(result).toPrecision(15);
+                    }
+                } else {
+                    display.innerHTML = "Division by zero";
+                    setTimeout(function() {
+                        display.innerHTML = '0';
+                        clear()
+                    }, 1000);;
+                    return;
                 }
             }
             if (operator !== '=') {
