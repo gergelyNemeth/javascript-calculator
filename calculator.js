@@ -68,15 +68,19 @@ function clearNumber() {
 }
 
 function precisionOfNumbers(result) {
+    var preciseNumber;
     if ((result > 1 || result < -1) && String(result).length <= 17) {
-        display.innerHTML = String(result);
+        preciseNumber = String(result);
     } else if (result > 1 || result < -1) {
-        display.innerHTML = String(result.toExponential(10));
+        preciseNumber = String(result.toExponential(10));
+        // preciseNumber = parseFloat(Number(result).toPrecision(10));
     } else if (result > 0.000001 || result < -0.000001) {
-        display.innerHTML = String(result).slice(0, 17);
+        preciseNumber = String(result).slice(0, 17);
+        // preciseNumber = parseFloat(Number(result).toPrecision(17));
     } else {
-        display.innerHTML = parseFloat(Number(result).toPrecision(10))
+        preciseNumber = parseFloat(Number(result).toPrecision(10));
     }
+    return preciseNumber;
 }
 
 function operation(operator) {
@@ -120,7 +124,8 @@ function operation(operator) {
                 newNumber = false;
             }
             // Prevent displaying too long number
-            precisionOfNumbers(result);
+            displayResult = precisionOfNumbers(result);
+            display.innerHTML = displayResult;
         }
     } else if (!enterPressed && operator !== '=' && operator !== '%' && operator !== '+/-') {
         result = Number(fullNumber);
