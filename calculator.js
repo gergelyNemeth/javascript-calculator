@@ -3,6 +3,7 @@ var numberButtons = document.querySelectorAll('a.number');
 var operatorButtons = document.querySelectorAll('a.operation');
 var baseOperatorButtons = document.querySelectorAll('a#minus, a#plus, a#multiply, a#division');
 var allButtons = document.querySelectorAll('a.number, a.operation');
+var clearButton = document.getElementById('clear');
 var fullNumber = '';
 var previousNumber = '';
 var newNumber = false;
@@ -10,13 +11,14 @@ var result = 0;
 var previousOperation = '';
 var enterPressed = false;
 var afterClear = true;
+var numberCleared = false;
 var percentage = 1;
 
 display.innerHTML = "0";
 
 function displayNumbers(number) {
     if (enterPressed) {
-        clear();
+        clearAll();
     }
     // Prevent adding more than one decimal point
     if (fullNumber.split('.').length >= 2 && number === '.') {
@@ -36,9 +38,11 @@ function displayNumbers(number) {
     }   
     display.innerHTML = fullNumber;
     newNumber = true;
+    clearButton.innerHTML = 'C';
+    numberCleared = false;
 }
 
-function clear() {
+function clearAll() {
     result = 0;
     previousOperation = '';
     display.innerHTML = '0';
@@ -47,6 +51,20 @@ function clear() {
     enterPressed = false;
     newNumber = false;
     afterClear = true;
+    numberCleared = false;
+    clearButton.innerHTML = 'AC';
+}
+
+function clearNumber() {
+    if (!fullNumber) {
+        previousNumber = false;
+    } else {
+        fullNumber = '';
+    }
+    display.innerHTML = '0';
+    numberCleared = true;
+    enterPressed = false;
+    clearButton.innerHTML = 'AC';
 }
 
 function precisionOfNumbers(result) {
@@ -93,7 +111,7 @@ function operation(operator) {
                     display.innerHTML = 'Division by zero';
                     setTimeout(function() {
                         display.innerHTML = '0';
-                        clear()
+                        clearAll()
                     }, 1000);;
                     return;
                 }
@@ -159,10 +177,8 @@ function operation(operator) {
 // Handle key press
 function keyPress(event) {
     eventKey = event.key;
-    if (eventKey === 'c') {
-        clear();
-        eventKey = 'C';
-    } else if (eventKey === ',') {
+    var activeOperation = eventKey;
+    if (eventKey === ',') {
         displayNumbers('.');
     } else if (eventKey === '*') {
         eventKey = 'x';
@@ -174,6 +190,14 @@ function keyPress(event) {
     if (eventKey === '+' || eventKey === '-' || eventKey === 'x' || eventKey === '/' 
         || eventKey === '=' || eventKey === '+/-' || eventKey === '%') {
         operation(eventKey);
+    }
+    if (eventKey === 'c' && !numberCleared && !enterPressed) {
+        clearNumber();
+        eventKey = 'AC';
+        activeOperation = previousOperation;
+    } else if (eventKey === 'c' && (numberCleared || enterPressed)) {
+        clearAll();
+        eventKey = 'AC';
     }
     for (let i = 0; i < numberButtons.length; i++) {
         if (eventKey === numberButtons[i].innerHTML) {
@@ -189,7 +213,7 @@ function keyPress(event) {
 
         }
         for (let i = 0; i < baseOperatorButtons.length; i++) {
-            if (eventKey === baseOperatorButtons[i].innerHTML) {
+            if (activeOperation === baseOperatorButtons[i].innerHTML) {
                 baseOperatorButtons[i].classList.add('active-operation');
             } else {
                 baseOperatorButtons[i].classList.remove('active-operation')
@@ -203,13 +227,23 @@ for (let i = 0; i < numberButtons.length; i++) {
         displayNumbers(numberButtons[i].innerHTML);
     }
 }
-// Event handlers of the number buttons
+// Event handlers of the operator buttons
 for (let i = 0; i < operatorButtons.length; i++) {
     operatorButtons[i].onclick = function () {
-        var operator = operatorButtons[i];
-        operation(operator.innerHTML);
-        if (operator.innerHTML === 'C') {
-            clear();
+        var operatorButton = operatorButtons[i];
+        operation(operatorButton.innerHTML);
+        if (operatorButton.innerHTML === 'C' || operatorButton.innerHTML === 'AC') {
+            clearAll();
+            operatorButton.innerHTML = 'AC';
+        }
+        for (let i = 0; i < allButtons.length; i++) {
+            for (let i = 0; i < baseOperatorButtons.length; i++) {
+                if (operatorButton.innerHTML === baseOperatorButtons[i].innerHTML) {
+                    baseOperatorButtons[i].classList.add('active-operation');
+                } else {
+                    baseOperatorButtons[i].classList.remove('active-operation')
+                }
+            }
         }
     }
 }
