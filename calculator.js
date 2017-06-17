@@ -67,18 +67,24 @@ function clearNumber() {
     clearButton.innerHTML = 'AC';
 }
 
+function roundNumber(number, precision) {
+    var factor = Math.pow(10, precision);
+    var tempNumber = number * factor;
+    var roundedTempNumber = Math.round(tempNumber);
+    return roundedTempNumber / factor;
+}
+
 function precisionOfNumbers(result) {
     var preciseNumber;
+    var intLength = String(Math.floor(result)).length;
     if ((result > 1 || result < -1) && String(result).length <= 17) {
         preciseNumber = String(result);
-    } else if (result > 1 || result < -1) {
-        preciseNumber = String(result.toExponential(10));
-        // preciseNumber = parseFloat(Number(result).toPrecision(10));
-    } else if (result > 0.000001 || result < -0.000001) {
-        preciseNumber = String(result).slice(0, 17);
-        // preciseNumber = parseFloat(Number(result).toPrecision(17));
+    } else if (result > (10**15) || result < - (10**15)) {
+        preciseNumber = String(Number(result).toExponential(10));
+    } else if (result < 0.00001 && result > 0 || result < 0 && result > -0.00001) {
+        preciseNumber = String(Number(result).toExponential(10));
     } else {
-        preciseNumber = parseFloat(Number(result).toPrecision(10));
+        preciseNumber = String(roundNumber(Number(result), 16-intLength));
     }
     return preciseNumber;
 }
@@ -239,13 +245,11 @@ for (let i = 0; i < operatorButtons.length; i++) {
             clearAll();
             operatorButton.innerHTML = 'AC';
         }
-        for (let i = 0; i < allButtons.length; i++) {
-            for (let i = 0; i < baseOperatorButtons.length; i++) {
-                if (operatorButton.innerHTML === baseOperatorButtons[i].innerHTML) {
-                    baseOperatorButtons[i].classList.add('active-operation');
-                } else {
-                    baseOperatorButtons[i].classList.remove('active-operation')
-                }
+        for (let i = 0; i < baseOperatorButtons.length; i++) {
+            if (operatorButton.innerHTML === baseOperatorButtons[i].innerHTML) {
+                baseOperatorButtons[i].classList.add('active-operation');
+            } else {
+                baseOperatorButtons[i].classList.remove('active-operation')
             }
         }
     }
