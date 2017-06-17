@@ -146,25 +146,23 @@ function operation(operator) {
             } else  {
                 display.innerHTML = "-" + display.innerHTML;
             }
-            // newNumber = true;
             return;
         }
     }
     // Percentage of numbers
     if (operator === '%') {
-        percentage = Number(fullNumber) / 100;
-        if (previousOperation === '+' || previousOperation === '-') {
-            fullNumber = Number(result) * percentage;
-        } else if (previousOperation === 'x' || previousOperation === '/') {
-            fullNumber = percentage;
+        if (!enterPressed) {
+            percentage = Number(fullNumber) / 100;
         } else {
-            if (result) {
-                fullNumber = percentage;
-            } else {
-                fullNumber = percentage;
-            }
+            percentage = result / 100;
         }
-        display.innerHTML = fullNumber;
+        if ((previousOperation === '+' || previousOperation === '-') && !enterPressed) {
+            fullNumber = Number(result) * percentage;
+        } else {
+            fullNumber = percentage;
+        }
+        displayFullNumber = precisionOfNumbers(fullNumber);
+        display.innerHTML = displayFullNumber;
     }
     // Data preparation after operation
     if (operator !== '=' && operator !== '%') {
