@@ -54,7 +54,7 @@ function precisionOfNumbers(result) {
         display.innerHTML = String(result);
     } else if (result > 1 || result < -1) {
         display.innerHTML = String(result.toExponential(10));
-    } else if (result > 0.000001) {
+    } else if (result > 0.000001 || result < -0.000001) {
         display.innerHTML = String(result).slice(0, 17);
     } else {
         display.innerHTML = parseFloat(Number(result).toPrecision(10))
