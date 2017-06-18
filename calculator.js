@@ -162,7 +162,7 @@ function operation(operator) {
             newNumber = false;
         }
     }
-    // Plus-minus change
+    // Change a positive number to negative and vice versa
     if (operator === '+/-') {
         if (newNumber) {
             if (!enterPressed) {
@@ -173,7 +173,7 @@ function operation(operator) {
             if (display.innerHTML.startsWith('-')) {
                 display.innerHTML = display.innerHTML.slice(1);
             } else  {
-                display.innerHTML = "-" + display.innerHTML;
+                display.innerHTML = '-' + display.innerHTML;
             }
             return;
         }
@@ -184,9 +184,11 @@ function operation(operator) {
             percentage = Number(fullNumber) / 100;
         } else {
             percentage = result / 100;
-        }
+        } 
+        // Percentage of the previous number after addition or subtraction
         if ((previousOperation === '+' || previousOperation === '-') && !enterPressed) {
             fullNumber = Number(result) * percentage;
+        // Percentage of the actual number after other operation
         } else {
             fullNumber = percentage;
         }
@@ -206,8 +208,10 @@ function operation(operator) {
         enterPressed = true;
     }
 }
+
 // Handle key press
 function keyPress(event) {
+    var activeOperation;
     eventKey = event.key;
     if (eventKey === ',') {
         displayNumbers('.');
@@ -218,7 +222,7 @@ function keyPress(event) {
     } else if (eventKey === 'm') {
         eventKey = '+/-';
     }
-    var activeOperation = eventKey;
+    activeOperation = eventKey;
     if (eventKey === '+' || eventKey === '-' || eventKey === 'x' || eventKey === '/' 
         || eventKey === '=' || eventKey === '+/-' || eventKey === '%') {
         operation(eventKey);
@@ -253,10 +257,14 @@ function keyPress(event) {
         }
     }
 }
+
 // Event handlers of the number buttons
 for (let i = 0; i < numberButtons.length; i++) {
     numberButtons[i].onclick = function () {
         displayNumbers(numberButtons[i].innerHTML);
+        for (let i = 0; i < baseOperatorButtons.length; i++) {
+            baseOperatorButtons[i].classList.remove('active-operation')
+        }
     }
 }
 // Event handlers of the operator buttons
@@ -266,13 +274,11 @@ for (let i = 0; i < operatorButtons.length; i++) {
         operation(operatorButton.innerHTML);
         if (operatorButton.innerHTML === 'C' || operatorButton.innerHTML === 'AC') {
             clearAll();
-            operatorButton.innerHTML = 'AC';
+            // operatorButton.innerHTML = 'AC';
         }
         for (let i = 0; i < baseOperatorButtons.length; i++) {
             if (operatorButton.innerHTML === baseOperatorButtons[i].innerHTML) {
                 baseOperatorButtons[i].classList.add('active-operation');
-            } else {
-                baseOperatorButtons[i].classList.remove('active-operation')
             }
         }
     }
