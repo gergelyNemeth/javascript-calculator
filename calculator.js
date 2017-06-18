@@ -8,6 +8,7 @@ var fullNumber = '';
 var previousNumber = '';
 var newNumber = false;
 var result = 0;
+var previousResult = 0;
 var previousOperation = '';
 var enterPressed = false;
 var afterClear = true;
@@ -105,15 +106,37 @@ function operation(operator) {
         if (newNumber) {
             result = Number(result); 
             number = Number(fullNumber);
-            if (previousOperation === '+') {
-                result += number;   
-            } else if (previousOperation ==='-') {
+            // Addition
+            if (!previousResult && previousOperation === '+' && (operator !== 'x' && operator !== '/')) {
+                result += number;
+            } else if (!previousResult && previousOperation === '+' && (operator === 'x' || operator === '/')) {
+                previousResult = result;
+                result = 0;
+                result += number;
+            // Subtraction
+            } else if (!previousResult && previousOperation ==='-' && (operator !== 'x' && operator !== '/')) {
                 result -= number;
-            } else if (previousOperation ==='x') {
+            } else if (!previousResult && previousOperation === '-' && (operator === 'x' || operator === '/')) {
+                previousResult = result;
+                result = 0;
+                result -= number;
+            // Multiply
+            } else if (!previousResult && previousOperation ==='x') {
                 result *= number;
-            } else if (previousOperation ==='/') {
+            } else if (previousResult && previousOperation === 'x' && (operator === '+' || operator === '-'|| operator === '=')) {
+                result *= number;
+                result += previousResult;
+                previousResult = 0;
+            // Division
+            } else if (previousOperation ==='/'){
                 if (number !== 0) {
-                    result /= number;
+                    if (!previousResult) {
+                        result /= number;
+                    } else if (previousResult && (operator === '+' || operator === '-'|| operator === '=')) {
+                        result /= number;
+                        result += previousResult;
+                        previousResult = 0;
+                    }
                     if (Math.floor(result) !== result) {
                         result = Number(result).toPrecision(15);
                     }
@@ -122,7 +145,7 @@ function operation(operator) {
                     setTimeout(function() {
                         display.innerHTML = '0';
                         clearAll()
-                    }, 1000);;
+                    }, 1000);
                     return;
                 }
             }
@@ -186,7 +209,6 @@ function operation(operator) {
 // Handle key press
 function keyPress(event) {
     eventKey = event.key;
-    var activeOperation = eventKey;
     if (eventKey === ',') {
         displayNumbers('.');
     } else if (eventKey === '*') {
@@ -196,6 +218,7 @@ function keyPress(event) {
     } else if (eventKey === 'm') {
         eventKey = '+/-';
     }
+    var activeOperation = eventKey;
     if (eventKey === '+' || eventKey === '-' || eventKey === 'x' || eventKey === '/' 
         || eventKey === '=' || eventKey === '+/-' || eventKey === '%') {
         operation(eventKey);
