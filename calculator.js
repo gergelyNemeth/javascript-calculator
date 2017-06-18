@@ -258,6 +258,12 @@ function keyPress(event) {
     }
 }
 
+// Prevent focus on button elements to make possible to use enter properly
+for (let i = 0; i < allButtons.length; i++) {
+    allButtons[i].onfocus = function () {
+        allButtons[i].blur();
+    }
+}
 // Event handlers of the number buttons
 for (let i = 0; i < numberButtons.length; i++) {
     numberButtons[i].onclick = function () {
